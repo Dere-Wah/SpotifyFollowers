@@ -31,6 +31,7 @@ def extract_access_token(html_source):
     else:
         return None
 
+
 def merge_lists_without_duplicates(list1, list2):
     merged_list = list1 + list2
     merged_set = set(merged_list)

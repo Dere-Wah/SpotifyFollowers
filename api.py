@@ -1,6 +1,5 @@
 import time
 import traceback
-from urllib.parse import unquote
 import requests
 from utils import extract_user_ids, merge_lists_without_duplicates
 
@@ -62,7 +61,7 @@ def follow_users_v1(chunk, access_token, sha):
     }
 
     response = requests.request("POST", url, json=payload, headers=headers)
-    if(response.ok):
+    if response.ok:
         failed = 0
         try:
             data = response.json()["data"]["followUsers"]["responses"]

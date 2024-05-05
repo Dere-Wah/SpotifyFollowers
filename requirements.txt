@@ -1,2 +1,4 @@
 seleniumbase
 pyyaml
+selenium
+requests

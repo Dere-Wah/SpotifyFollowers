@@ -1,4 +1,3 @@
-import json
 import re
 import time
 from urllib.parse import unquote
@@ -8,7 +7,6 @@ from selenium.webdriver.common.by import By
 from seleniumbase import Driver
 
 from utils import extract_access_token
-
 
 logs_raw = []
 
@@ -30,6 +28,7 @@ def spotify_login(driver: Driver, mail: str, password: str):
     password_element.send_keys(Keys.ENTER)
     time.sleep(3)
 
+
 def verify_login(driver: Driver):
     print("Verifying login...")
     time.sleep(1)
@@ -37,11 +36,11 @@ def verify_login(driver: Driver):
     try:
         button = driver.find_element(By.ID, "login-button")
         print("Login is not verified.")
-        #if we can still see the login button, we are NOT logged in.
+        # if we can still see the login button, we are NOT logged in.
         return False
     except:
         print("Login is verified!")
-        #if we can't see the login button, we probably are logged in.
+        # if we can't see the login button, we probably are logged in.
         return True
 
 
@@ -55,7 +54,7 @@ def get_spotify_tokens(mail, password):
         driver.get("https://spotify.com/")
         time.sleep(5)
         web_token = extract_access_token(driver.page_source)
-        sha = get_sha256Hash_from_spotify_search(driver)
+        sha = get_sha256hash_from_spotify_search(driver)
         driver.quit()
         return web_token, sha
     else:
@@ -63,13 +62,13 @@ def get_spotify_tokens(mail, password):
         raise Exception("Could not login to spotify via selenium... Are the credentials correct?")
 
 
-def get_sha256Hash_from_spotify_search(driver):
+def get_sha256hash_from_spotify_search(driver):
     follow_test_user(driver)
     url = ""
     for log in logs_raw:
         try:
             url = (log["params"]["request"]["url"])
-            if("persistedQuery" in url) and ("isFollowingUsers" in url):
+            if ("persistedQuery" in url) and ("isFollowingUsers" in url):
                 url = unquote(url)
                 break
         except:
@@ -77,8 +76,8 @@ def get_sha256Hash_from_spotify_search(driver):
     pattern = r'"sha256Hash":"([a-f0-9]+)"'
     match = re.search(pattern, url)
     if match:
-        sha256Hash = match.group(1)
-        return sha256Hash
+        sha256hash = match.group(1)
+        return sha256hash
     else:
         print("sha256Hash not found in the URL.")
         return None
@@ -100,10 +99,3 @@ def follow_test_user(driver):
         return None
     follow_button.click()
     time.sleep(5)  # Wait for suggestions to load (adjust as needed)
-
-
-
-
-
-
-
